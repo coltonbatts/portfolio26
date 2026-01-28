@@ -1,0 +1,867 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   VICE MAGAZINE / DAVID LYNCH / SKATE CULTURE
+   Dark, Gritty, Confident, Alternative
+   NOT corporate. NOT generic. RAW.
+   ============================================ */
+
+/* Root Variables - Intentional & Muted */
+:root {
+  --color-black: #0a0a0a;
+  --color-dark: #1a1a1a;
+  --color-dark-alt: #0f0f0f;
+  --color-gray-dark: #2a2a2a;
+  --color-gray: #333333;
+  --color-gray-light: #555555;
+  --color-light: #e8e8e8;
+  --color-accent: #ffffff;
+  --color-accent-secondary: #f5f5f5;
+  --color-accent-muted: #d9d9d9;
+  
+  /* Glow effects */
+  --glow-accent: 0 0 20px rgba(255, 255, 255, 0.3);
+  --glow-accent-strong: 0 0 40px rgba(255, 255, 255, 0.4);
+  
+  /* Grain & texture */
+  --grain-opacity: 0.04;
+  
+  /* Transitions */
+  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   GLOBAL RESET & BASE
+   ============================================ */
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-black);
+  color: var(--color-light);
+}
+
+body {
+  background-color: var(--color-black);
+  color: var(--color-light);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Grain overlay - GRITTY TEXTURE */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, var(--grain-opacity)),
+      rgba(0, 0, 0, var(--grain-opacity)) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+}
+
+/* ============================================
+   TYPOGRAPHY SYSTEM - BOLD & INTENTIONAL
+   ============================================ */
+
+/* Colton Font - The Signature */
+.colton {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* Display hierarchy */
+.colton-mega {
+  @apply colton;
+  font-size: clamp(3.5rem, 10vw, 12rem);
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+
+.colton-large {
+  @apply colton;
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.colton-display {
+  @apply colton;
+  font-size: clamp(1.75rem, 6vw, 3.5rem);
+  letter-spacing: -0.035em;
+  line-height: 1.0;
+}
+
+.colton-heading {
+  @apply colton;
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+/* Semantic headings */
+h1, h2, h3, h4, h5, h6 {
+  @apply colton;
+  color: var(--color-light);
+}
+
+h1 { @apply colton-mega; }
+h2 { @apply colton-large; }
+h3 { @apply colton-display; }
+h4 { @apply colton-heading; }
+h5 { font-size: 1.25rem; letter-spacing: -0.02em; }
+h6 { font-size: 1rem; letter-spacing: -0.01em; }
+
+p {
+  line-height: 1.65;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--color-light);
+}
+
+.text-muted { color: var(--color-gray-light); }
+.text-accent { color: var(--color-accent); }
+.text-accent-secondary { color: var(--color-accent-secondary); }
+
+/* ============================================
+   SCROLLBAR - MINIMAL
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray-dark);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+  box-shadow: var(--glow-accent);
+}
+
+/* ============================================
+   BUTTONS - BOLD, MINIMAL, INTENTIONAL
+   ============================================ */
+
+.btn {
+  @apply inline-block px-8 py-3 text-xs font-bold uppercase tracking-widest;
+  position: relative;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+/* Primary - White Glowing */
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-black);
+  border-color: var(--color-accent);
+  box-shadow: var(--glow-accent);
+  
+  &:hover {
+    background-color: var(--color-black);
+    color: var(--color-accent);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.15), var(--glow-accent-strong);
+  }
+  
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* Secondary - Outline */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-light);
+  border-color: var(--color-light);
+  
+  &:hover {
+    background-color: var(--color-light);
+    color: var(--color-black);
+  }
+  
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* Tertiary - Ghost / Minimal */
+.btn-tertiary {
+  background-color: transparent;
+  color: var(--color-light);
+  border-color: transparent;
+  padding: 8px 0;
+  font-size: 0.75rem;
+  
+  &:hover {
+    color: var(--color-accent);
+    border-bottom: 2px solid var(--color-accent);
+    text-shadow: var(--glow-accent);
+  }
+}
+
+/* ============================================
+   LINKS - INTERACTIVE & GRITTY
+   ============================================ */
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-fast);
+}
+
+.link-hover {
+  position: relative;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--color-accent);
+  
+  &:hover {
+    color: var(--color-accent);
+    text-decoration-color: var(--color-accent);
+    padding-left: 4px;
+    text-shadow: var(--glow-accent);
+  }
+}
+
+/* ============================================
+   SECTIONS & CONTAINERS
+   ============================================ */
+
+.section {
+  @apply py-24 md:py-32 lg:py-40 px-6 md:px-12 lg:px-16;
+  position: relative;
+  width: 100%;
+}
+
+.container {
+  @apply max-w-7xl mx-auto;
+}
+
+.container-tight {
+  @apply max-w-5xl mx-auto;
+}
+
+/* ============================================
+   HEADER / NAVIGATION - MINIMAL ATTITUDE
+   ============================================ */
+
+.header {
+  @apply fixed top-0 w-full z-50 transition-all duration-300;
+  background: transparent;
+  backdrop-filter: none;
+  
+  &.scrolled {
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--color-gray-dark);
+  }
+}
+
+.header-nav {
+  @apply h-20 flex items-center justify-between container px-6 md:px-12 lg:px-16;
+}
+
+.header-logo {
+  @apply colton text-xl md:text-2xl;
+  color: var(--color-light);
+  transition: all var(--transition-fast);
+  letter-spacing: -0.04em;
+  
+  &:hover {
+    color: var(--color-accent);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.nav-desktop {
+  @apply hidden md:flex items-center gap-12;
+  
+  a {
+    @apply text-xs font-bold uppercase tracking-wider text-[#999];
+    position: relative;
+    transition: all var(--transition-fast);
+    
+    &:hover {
+      color: var(--color-accent);
+      text-shadow: var(--glow-accent);
+    }
+    
+    span {
+      display: block;
+      height: 2px;
+      background: var(--color-accent);
+      width: 0;
+      transition: width var(--transition-fast);
+      box-shadow: var(--glow-accent);
+    }
+  }
+}
+
+.nav-mobile-toggle {
+  @apply md:hidden text-2xl font-bold cursor-pointer;
+  transition: all var(--transition-fast);
+  background: none;
+  border: none;
+  
+  &:hover {
+    color: var(--color-accent);
+    text-shadow: var(--glow-accent);
+  }
+}
+
+/* ============================================
+   HERO SECTION - BOLD, ASYMMETRIC, EDITORIAL
+   ============================================ */
+
+.hero {
+  @apply relative min-h-[100vh] flex items-center pt-24 pb-20;
+  background: linear-gradient(135deg, var(--color-black) 0%, var(--color-dark-alt) 100%);
+  overflow: hidden;
+}
+
+/* Asymmetric decorative elements */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 70vw;
+  height: 70vw;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  left: -15%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 25s ease-in-out infinite reverse;
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.hero-content {
+  @apply relative z-10 container;
+  max-width: 95%;
+  
+  @media (min-width: 768px) {
+    max-width: 90%;
+  }
+}
+
+.hero-title {
+  @apply colton-mega mb-8;
+  color: var(--color-light);
+  animation: slideInUp 0.9s ease-out;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  
+  .accent {
+    color: var(--color-accent);
+    display: block;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+.hero-subtitle {
+  @apply text-lg md:text-xl text-[#999] max-w-2xl mb-10 leading-relaxed;
+  animation: slideInUp 0.9s ease-out 0.15s both;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+
+.hero-meta {
+  @apply text-xs text-[#666] space-y-2 mb-14;
+  animation: slideInUp 0.9s ease-out 0.25s both;
+  
+  p {
+    @apply font-bold uppercase tracking-widest;
+  }
+}
+
+.hero-cta-group {
+  @apply flex flex-col sm:flex-row gap-6;
+  animation: slideInUp 0.9s ease-out 0.35s both;
+}
+
+/* ============================================
+   PORTFOLIO SECTION - MAGAZINE SPREADS
+   ============================================ */
+
+.portfolio-section {
+  @apply section;
+  position: relative;
+  
+  /* Asymmetric decorative accent */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 20%;
+    left: -10%;
+    width: 40vw;
+    height: 40vw;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(40px);
+  }
+}
+
+.portfolio-header {
+  @apply mb-24 max-w-4xl;
+  animation: fadeIn 0.8s ease-out;
+  
+  h2 {
+    @apply colton-large mb-6 text-[#e8e8e8];
+  }
+  
+  p {
+    @apply text-base md:text-lg text-[#999] leading-relaxed;
+  }
+}
+
+/* Magazine-style asymmetric grid */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 2fr 1.2fr;
+    gap: 3.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: auto;
+    gap: 3rem;
+    
+    /* Asymmetric positioning */
+    .portfolio-card:nth-child(1) {
+      grid-column: 1 / 3;
+      grid-row: 1;
+    }
+    
+    .portfolio-card:nth-child(2) {
+      grid-column: 3;
+      grid-row: 1 / 3;
+    }
+    
+    .portfolio-card:nth-child(3) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    
+    .portfolio-card:nth-child(4) {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    
+    .portfolio-card:nth-child(5) {
+      grid-column: 3;
+      grid-row: 3;
+    }
+    
+    .portfolio-card:nth-child(6) {
+      grid-column: 1 / 3;
+      grid-row: 3;
+    }
+  }
+}
+
+/* ============================================
+   PROJECT CARD - MAGAZINE SPREAD STYLE
+   NOT standard cards. EDITORIAL VIBE.
+   ============================================ */
+
+.portfolio-card {
+  @apply relative overflow-hidden;
+  background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-alt) 100%);
+  border: 2px solid var(--color-gray-dark);
+  padding: 3rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 500px;
+  position: relative;
+  
+  /* Gritty texture overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.01),
+        rgba(255, 255, 255, 0.01) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* Subtle decorative element - skate/editorial vibe */
+  &::after {
+    content: "";
+    position: absolute;
+    top: -20%;
+    right: -15%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: all var(--transition-slow);
+    filter: blur(30px);
+  }
+  
+  &:hover {
+    border-color: var(--color-accent);
+    box-shadow: 
+      0 0 40px rgba(255, 255, 255, 0.2),
+      inset 0 0 40px rgba(255, 255, 255, 0.05);
+    transform: translateY(-16px) skewY(-1deg);
+    background: linear-gradient(135deg, var(--color-dark) 0%, rgba(20, 20, 20, 0.8) 100%);
+    
+    &::after {
+      transform: scale(1.3);
+      opacity: 1;
+    }
+    
+    .portfolio-year {
+      color: var(--color-accent);
+    }
+    
+    .portfolio-title {
+      color: var(--color-accent);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+.portfolio-year {
+  @apply text-xs font-bold uppercase tracking-widest text-[#999];
+  transition: all var(--transition-fast);
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+.portfolio-title {
+  @apply colton-display text-[#e8e8e8] mb-4 flex-grow;
+  transition: all var(--transition-normal);
+  position: relative;
+  z-index: 10;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.portfolio-client {
+  @apply font-bold text-[#e8e8e8] mb-1 text-sm;
+  position: relative;
+  z-index: 10;
+  letter-spacing: 0.05em;
+}
+
+.portfolio-role {
+  @apply text-xs text-[#999] mb-4;
+  position: relative;
+  z-index: 10;
+}
+
+.portfolio-description {
+  @apply text-sm text-[#bbb] leading-relaxed mb-6;
+  position: relative;
+  z-index: 10;
+  font-weight: 400;
+}
+
+.portfolio-services {
+  @apply pt-6 border-t-2 border-[#2a2a2a] mt-auto;
+  position: relative;
+  z-index: 10;
+}
+
+.portfolio-services-label {
+  @apply text-xs uppercase font-bold tracking-widest text-[#999] mb-2 block;
+}
+
+.portfolio-services-list {
+  @apply text-xs text-[#999];
+  letter-spacing: 0.05em;
+}
+
+.portfolio-cta {
+  @apply text-xs font-bold uppercase tracking-widest mt-6;
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+  position: relative;
+  z-index: 10;
+  text-shadow: var(--glow-accent);
+  
+  svg, .arrow {
+    transition: transform var(--transition-fast);
+  }
+  
+  .portfolio-card:hover & {
+    gap: 0.75rem;
+    text-shadow: var(--glow-accent-strong);
+    
+    .arrow {
+      transform: translateX(4px);
+    }
+  }
+}
+
+/* ============================================
+   FOOTER - MINIMAL & INTENTIONAL
+   ============================================ */
+
+.footer {
+  @apply bg-[#0f0f0f] border-t-2 border-[#2a2a2a] py-16 md:py-24;
+  position: relative;
+}
+
+.footer-content {
+  @apply container px-6 md:px-12 lg:px-16;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-section h4 {
+  @apply colton text-lg mb-4 text-[#e8e8e8];
+}
+
+.footer-section p {
+  @apply text-[#999] text-sm;
+}
+
+.footer-links {
+  @apply space-y-2;
+  
+  a {
+    @apply text-[#999] text-sm transition-all duration-200;
+    
+    &:hover {
+      color: var(--color-accent);
+      padding-left: 4px;
+    }
+  }
+}
+
+.footer-divider {
+  @apply border-t-2 border-[#2a2a2a] py-6 flex flex-col md:flex-row justify-between items-center gap-4;
+}
+
+.footer-bottom {
+  @apply text-[#666] text-xs font-bold uppercase tracking-widest;
+}
+
+/* ============================================
+   ANIMATIONS - SMOOTH, INTENTIONAL, EDITORIAL
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(25px) translateX(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    text-shadow: 0 0 20px rgba(255, 0, 102, 0);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 0, 102, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(255, 0, 102, 0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.8s ease-out forwards;
+}
+
+/* Staggered animations */
+.stagger-1 { animation-delay: 0s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.2s; }
+.stagger-4 { animation-delay: 0.3s; }
+.stagger-5 { animation-delay: 0.4s; }
+
+/* ============================================
+   UTILITY CLASSES - GRITTY DETAILS
+   ============================================ */
+
+.gritty-border {
+  border: 2px solid var(--color-gray-dark);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.accent-glow {
+  box-shadow: var(--glow-accent);
+}
+
+.accent-glow-lg {
+  box-shadow: var(--glow-accent-strong);
+}
+
+.neon-border {
+  border: 2px solid var(--color-accent);
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1), var(--glow-accent);
+}
+
+.text-shadow-gritty {
+  text-shadow: 
+    2px 2px 0 rgba(255, 0, 102, 0.1),
+    4px 4px 0 rgba(255, 0, 102, 0.05);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .section {
+    @apply py-16 px-4;
+  }
+  
+  .colton-mega {
+    font-size: 2.5rem;
+    letter-spacing: -0.04em;
+  }
+  
+  .colton-large {
+    font-size: 1.75rem;
+    letter-spacing: -0.03em;
+  }
+  
+  .hero {
+    min-height: 80vh;
+  }
+  
+  .hero::before,
+  .hero::after {
+    width: 100vw;
+    height: 100vw;
+  }
+  
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .portfolio-card {
+    min-height: 400px;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body::before {
+    display: none;
+  }
+  
+  .header,
+  .footer,
+  .hero-cta-group {
+    display: none;
+  }
+}
