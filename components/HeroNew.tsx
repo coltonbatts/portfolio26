@@ -1,12 +1,47 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { 
+  ssr: false,
+  loading: () => null 
+});
 
 export default function HeroNew() {
+  const [ampersandAnim, setAmpersandAnim] = useState<any>(null);
+  const [connectorAnim, setConnectorAnim] = useState<any>(null);
+  const [floatersAnim, setFloatersAnim] = useState<any>(null);
+
+  useEffect(() => {
+    // Load animations asynchronously
+    Promise.all([
+      import("@/public/animations/ampersand-morph.json").then(m => m.default),
+      import("@/public/animations/flowing-connector.json").then(m => m.default),
+      import("@/public/animations/background-floaters.json").then(m => m.default),
+    ]).then(([amp, conn, float]) => {
+      setAmpersandAnim(amp);
+      setConnectorAnim(conn);
+      setFloatersAnim(float);
+    }).catch(err => console.log("Animation load error:", err));
+  }, []);
   return (
     <section className="hero-premium relative overflow-hidden min-h-screen flex items-center justify-center">
       {/* Premium gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 z-0" />
+
+      {/* Background floaters animation */}
+      <div className="absolute inset-0 z-5 opacity-40 pointer-events-none">
+        {floatersAnim && (
+          <Lottie
+            animationData={floatersAnim}
+            loop
+            autoplay
+            style={{ width: "100%", height: "100%" }}
+          />
+        )}
+      </div>
 
       {/* Animated decorative orbs */}
       <div className="absolute top-20 right-32 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse z-10" />
@@ -34,12 +69,22 @@ export default function HeroNew() {
                 Graphics
               </h1>
 
-              {/* Ampersand */}
+              {/* Ampersand connector with animation */}
               <div className="inline-flex items-center gap-4 my-6 animate-[fadeInUp_0.8s_ease-out_0.3s_forwards] opacity-0">
-                <span className="text-6xl md:text-7xl lg:text-8xl font-black text-white/60 hover:text-white transition-colors duration-300">
-                  &
-                </span>
-                <div className="w-24 h-1 bg-gradient-to-r from-white to-transparent" />
+                {connectorAnim ? (
+                  <div className="w-32 h-12">
+                    <Lottie
+                      animationData={connectorAnim}
+                      loop
+                      autoplay
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  </div>
+                ) : (
+                  <span className="text-6xl md:text-7xl lg:text-8xl font-black text-white/60">
+                    &
+                  </span>
+                )}
               </div>
 
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none tracking-tighter text-white/80 animate-[fadeInUp_0.8s_ease-out_0.4s_forwards] opacity-0">
@@ -81,26 +126,37 @@ export default function HeroNew() {
               {/* Outer glow ring */}
               <div className="absolute inset-0 border-2 border-white/20 rounded-full animate-pulse" />
 
-              {/* Ampersand SVG */}
+              {/* Animated Ampersand Morph */}
               <div className="w-full h-full flex items-center justify-center relative">
-                <svg
-                  className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] animate-[glow-pulse_3s_ease-in-out_infinite]"
-                  viewBox="0 0 400 400"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <text
-                    x="200"
-                    y="240"
-                    fontSize="200"
-                    fontWeight="900"
-                    textAnchor="middle"
-                    fill="white"
-                    fontFamily="system-ui"
+                {ampersandAnim ? (
+                  <div className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                    <Lottie
+                      animationData={ampersandAnim}
+                      loop
+                      autoplay
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  </div>
+                ) : (
+                  <svg
+                    className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] animate-[glow-pulse_3s_ease-in-out_infinite]"
+                    viewBox="0 0 400 400"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    &
-                  </text>
-                </svg>
+                    <text
+                      x="200"
+                      y="240"
+                      fontSize="200"
+                      fontWeight="900"
+                      textAnchor="middle"
+                      fill="white"
+                      fontFamily="system-ui"
+                    >
+                      &
+                    </text>
+                  </svg>
+                )}
               </div>
 
               {/* Inner glow */}
