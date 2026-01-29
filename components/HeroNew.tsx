@@ -2,41 +2,44 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-// Use dynamic imports for Lottie to avoid SSR issues
-let LottieComponent: any = null;
+const Lottie = dynamic(() => import("lottie-react").then(mod => mod.default), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function HeroNew() {
-  const [animData, setAnimData] = useState<any>({
+  const [animations, setAnimations] = useState<{
+    ampersand: any;
+    connector: any;
+    floaters: any;
+  }>({
     ampersand: null,
     connector: null,
     floaters: null,
   });
-  const [Lottie, setLottie] = useState<any>(null);
 
   useEffect(() => {
-    // Load Lottie component and animation data on client side only
-    (async () => {
+    const loadAnimations = async () => {
       try {
-        const lottieReact = await import("lottie-react");
-        setLottie(() => lottieReact.default);
-
-        // Load animation JSON files
         const [amp, conn, floaters] = await Promise.all([
-          fetch("/animations/ampersand-morph.json").then(r => r.json()),
-          fetch("/animations/flowing-connector.json").then(r => r.json()),
-          fetch("/animations/background-floaters.json").then(r => r.json()),
+          fetch("/animations/ampersand-rotating.json").then(r => r.json()).catch(() => null),
+          fetch("/animations/connector-wave.json").then(r => r.json()).catch(() => null),
+          fetch("/animations/background-floaters.json").then(r => r.json()).catch(() => null),
         ]);
 
-        setAnimData({
+        setAnimations({
           ampersand: amp,
           connector: conn,
           floaters: floaters,
         });
       } catch (err) {
-        console.log("Animation load error (non-critical):", err);
+        console.log("Animation load note:", err);
       }
-    })();
+    };
+
+    loadAnimations();
   }, []);
 
   return (
@@ -44,13 +47,13 @@ export default function HeroNew() {
       {/* Premium gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 z-0" />
 
-      {/* Background floaters animation - only render if Lottie loaded */}
-      {Lottie && animData.floaters && (
-        <div className="absolute inset-0 z-5 opacity-40 pointer-events-none">
+      {/* Background floaters animation */}
+      {Lottie && animations.floaters && (
+        <div className="absolute inset-0 z-5 opacity-40 pointer-events-none overflow-hidden">
           <Lottie
-            animationData={animData.floaters}
-            loop
-            autoplay
+            animationData={animations.floaters}
+            loop={true}
+            autoplay={true}
             style={{ width: "100%", height: "100%" }}
           />
         </div>
@@ -71,50 +74,50 @@ export default function HeroNew() {
             </div>
 
             {/* Main headline */}
-            <div className="mb-8 space-y-2">
-              <p className="text-xs md:text-sm font-mono font-bold uppercase tracking-[0.2em] text-white/40 mb-6 animate-[fadeInUp_0.8s_ease-out_0.1s_forwards] opacity-0">
+            <div className="mb-8 space-y-4">
+              <p className="text-xs md:text-sm font-mono font-bold uppercase tracking-[0.2em] text-white/40 animate-[fadeInUp_0.8s_ease-out_0.1s_forwards] opacity-0">
                 Premium Motion Graphics
               </p>
 
-              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter mb-4 text-white animate-[fadeInUp_0.8s_ease-out_0.2s_forwards] opacity-0">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tighter text-white animate-[fadeInUp_0.8s_ease-out_0.2s_forwards] opacity-0">
                 Motion Graphics
               </h1>
 
-              {/* Connector with optional animation */}
-              <div className="inline-flex items-center gap-6 my-6 animate-[fadeInUp_0.8s_ease-out_0.3s_forwards] opacity-0">
-                {Lottie && animData.connector ? (
-                  <div className="w-40 h-10">
+              {/* Animated connector between text */}
+              <div className="flex items-center gap-4 my-4 animate-[fadeInUp_0.8s_ease-out_0.3s_forwards] opacity-0">
+                {Lottie && animations.connector ? (
+                  <div className="h-16 w-48 flex-shrink-0">
                     <Lottie
-                      animationData={animData.connector}
-                      loop
-                      autoplay
+                      animationData={animations.connector}
+                      loop={true}
+                      autoplay={true}
                       style={{ width: "100%", height: "100%" }}
                     />
                   </div>
                 ) : (
-                  <span className="text-5xl md:text-6xl lg:text-7xl font-black text-white/60">
+                  <span className="text-4xl md:text-5xl lg:text-6xl font-black text-white/60">
                     &
                   </span>
                 )}
               </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none tracking-tighter text-white/80 animate-[fadeInUp_0.8s_ease-out_0.4s_forwards] opacity-0">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tighter text-white/80 animate-[fadeInUp_0.8s_ease-out_0.4s_forwards] opacity-0">
                 Designer
               </h1>
 
               {/* Subtitle */}
-              <p className="text-base md:text-lg text-zinc-400 leading-relaxed max-w-md mb-8 mt-8 animate-[fadeInUp_0.8s_ease-out_0.5s_forwards] opacity-0">
+              <p className="text-base md:text-lg text-zinc-400 leading-relaxed max-w-md mt-8 animate-[fadeInUp_0.8s_ease-out_0.5s_forwards] opacity-0">
                 Premium video production & motion design for brands that demand excellence. Working with Fortune 500 companies and forward-thinking agencies.
               </p>
 
               {/* Meta */}
-              <div className="space-y-2 mb-12 text-xs font-mono uppercase tracking-widest text-zinc-500 animate-[fadeInUp_0.8s_ease-out_0.6s_forwards] opacity-0">
+              <div className="space-y-2 mt-6 text-xs font-mono uppercase tracking-widest text-zinc-500 animate-[fadeInUp_0.8s_ease-out_0.6s_forwards] opacity-0">
                 <p>📍 NYC Based · Available Globally</p>
                 <p>⚡ Video Production · Motion Design · Editing</p>
               </div>
 
               {/* CTA buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 animate-[fadeInUp_0.8s_ease-out_0.7s_forwards] opacity-0">
+              <div className="flex flex-col sm:flex-row gap-4 mt-12 animate-[fadeInUp_0.8s_ease-out_0.7s_forwards] opacity-0">
                 <Link
                   href="/#portfolio"
                   className="group relative px-8 py-4 bg-white text-black font-bold uppercase tracking-widest text-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] hover:scale-105"
@@ -137,28 +140,29 @@ export default function HeroNew() {
               {/* Outer glow ring */}
               <div className="absolute inset-0 border-2 border-white/20 rounded-full animate-pulse" />
 
-              {/* Animated ampersand or static fallback */}
+              {/* Animated ampersand - Lottie or SVG fallback */}
               <div className="w-full h-full flex items-center justify-center relative">
-                {Lottie && animData.ampersand ? (
+                {Lottie && animations.ampersand ? (
                   <div className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">
                     <Lottie
-                      animationData={animData.ampersand}
-                      loop
-                      autoplay
+                      animationData={animations.ampersand}
+                      loop={true}
+                      autoplay={true}
                       style={{ width: "100%", height: "100%" }}
                     />
                   </div>
                 ) : (
                   <svg
-                    className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                    className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] animate-[glow-pulse_3s_ease-in-out_infinite]"
                     viewBox="0 0 400 400"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
+                    <circle cx="200" cy="200" r="100" fill="none" stroke="white" strokeWidth="2" opacity="0.3" />
                     <text
                       x="200"
                       y="240"
-                      fontSize="200"
+                      fontSize="160"
                       fontWeight="900"
                       textAnchor="middle"
                       fill="white"
