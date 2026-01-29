@@ -1,8 +1,5 @@
-"use client";
-
 import Link from "next/link";
 import { Project } from "@/data/projects";
-import { useState } from "react";
 
 interface ProjectCardProps {
   project: Project;
@@ -10,22 +7,18 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project, delay = 0 }: ProjectCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
+  // Pass delay as a CSS variable for the animation
   const style = {
-    animationDelay: `${delay * 0.1}s`,
-  };
+    "--delay": `${delay * 0.1}s`,
+    animationDelay: `var(--delay)`,
+  } as React.CSSProperties;
 
   return (
-    <Link href={`/projects/${project.id}`} style={style} className="animate-fade-in">
-      <article
-        className="portfolio-card group"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+    <Link href={`/projects/${project.id}`} style={style} className="animate-fade-in block h-full">
+      <article className="portfolio-card group h-full">
         {/* Year Tag - Editorial Marker */}
         <div>
-          <span className="portfolio-year">
+          <span className="portfolio-year block">
             {project.year}
             {project.endYear && project.endYear !== project.year
               ? `–${project.endYear}`

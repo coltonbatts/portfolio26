@@ -14,8 +14,8 @@
   --color-dark: #1a1a1a;
   --color-dark-alt: #0f0f0f;
   --color-gray-dark: #2a2a2a;
-  --color-gray: #333333;
-  --color-gray-light: #555555;
+  --color-gray: #555555;
+  --color-gray-light: #b5b5b5;
   --color-light: #e8e8e8;
   --color-accent: #ffffff;
   --color-accent-secondary: #f5f5f5;
@@ -404,14 +404,14 @@ a {
 }
 
 .hero-subtitle {
-  @apply text-lg md:text-xl text-[#999] max-w-2xl mb-10 leading-relaxed;
+  @apply text-lg md:text-xl text-[#b5b5b5] max-w-2xl mb-10 leading-relaxed;
   animation: slideInUp 0.9s ease-out 0.15s both;
   font-weight: 400;
   letter-spacing: 0.005em;
 }
 
 .hero-meta {
-  @apply text-xs text-[#666] space-y-2 mb-14;
+  @apply text-xs text-[#888] space-y-2 mb-14;
   animation: slideInUp 0.9s ease-out 0.25s both;
   
   p {
@@ -456,7 +456,7 @@ a {
   }
   
   p {
-    @apply text-base md:text-lg text-[#999] leading-relaxed;
+    @apply text-base md:text-lg text-[#b5b5b5] leading-relaxed;
   }
 }
 
