@@ -1,12 +1,60 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+// Use dynamic imports for Lottie to avoid SSR issues
+let LottieComponent: any = null;
 
 export default function HeroNew() {
+  const [animData, setAnimData] = useState<any>({
+    ampersand: null,
+    connector: null,
+    floaters: null,
+  });
+  const [Lottie, setLottie] = useState<any>(null);
+
+  useEffect(() => {
+    // Load Lottie component and animation data on client side only
+    (async () => {
+      try {
+        const lottieReact = await import("lottie-react");
+        setLottie(() => lottieReact.default);
+
+        // Load animation JSON files
+        const [amp, conn, floaters] = await Promise.all([
+          fetch("/animations/ampersand-morph.json").then(r => r.json()),
+          fetch("/animations/flowing-connector.json").then(r => r.json()),
+          fetch("/animations/background-floaters.json").then(r => r.json()),
+        ]);
+
+        setAnimData({
+          ampersand: amp,
+          connector: conn,
+          floaters: floaters,
+        });
+      } catch (err) {
+        console.log("Animation load error (non-critical):", err);
+      }
+    })();
+  }, []);
+
   return (
     <section className="hero-premium relative overflow-hidden min-h-screen flex items-center justify-center">
       {/* Premium gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 z-0" />
+
+      {/* Background floaters animation - only render if Lottie loaded */}
+      {Lottie && animData.floaters && (
+        <div className="absolute inset-0 z-5 opacity-40 pointer-events-none">
+          <Lottie
+            animationData={animData.floaters}
+            loop
+            autoplay
+            style={{ width: "100%", height: "100%" }}
+          />
+        </div>
+      )}
 
       {/* Animated decorative orbs */}
       <div className="absolute top-20 right-32 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse z-10" />
@@ -29,11 +77,33 @@ export default function HeroNew() {
               </p>
 
               <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter mb-4 text-white animate-[fadeInUp_0.8s_ease-out_0.2s_forwards] opacity-0">
-                Motion Graphics & Designer
+                Motion Graphics
+              </h1>
+
+              {/* Connector with optional animation */}
+              <div className="inline-flex items-center gap-6 my-6 animate-[fadeInUp_0.8s_ease-out_0.3s_forwards] opacity-0">
+                {Lottie && animData.connector ? (
+                  <div className="w-40 h-10">
+                    <Lottie
+                      animationData={animData.connector}
+                      loop
+                      autoplay
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  </div>
+                ) : (
+                  <span className="text-5xl md:text-6xl lg:text-7xl font-black text-white/60">
+                    &
+                  </span>
+                )}
+              </div>
+
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none tracking-tighter text-white/80 animate-[fadeInUp_0.8s_ease-out_0.4s_forwards] opacity-0">
+                Designer
               </h1>
 
               {/* Subtitle */}
-              <p className="text-base md:text-lg text-zinc-400 leading-relaxed max-w-md mb-8 animate-[fadeInUp_0.8s_ease-out_0.5s_forwards] opacity-0">
+              <p className="text-base md:text-lg text-zinc-400 leading-relaxed max-w-md mb-8 mt-8 animate-[fadeInUp_0.8s_ease-out_0.5s_forwards] opacity-0">
                 Premium video production & motion design for brands that demand excellence. Working with Fortune 500 companies and forward-thinking agencies.
               </p>
 
@@ -61,32 +131,43 @@ export default function HeroNew() {
             </div>
           </div>
 
-          {/* Right column - Visual element */}
+          {/* Right column - Hero visual with animated ampersand */}
           <div className="order-1 lg:order-2 flex items-center justify-center lg:justify-end relative h-96 md:h-full md:min-h-96">
             <div className="relative w-64 h-64 md:w-80 md:h-80 animate-[fadeInScale_1s_ease-out_0.2s_forwards] opacity-0">
               {/* Outer glow ring */}
               <div className="absolute inset-0 border-2 border-white/20 rounded-full animate-pulse" />
 
-              {/* Ampersand with glow */}
+              {/* Animated ampersand or static fallback */}
               <div className="w-full h-full flex items-center justify-center relative">
-                <svg
-                  className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-                  viewBox="0 0 400 400"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <text
-                    x="200"
-                    y="240"
-                    fontSize="200"
-                    fontWeight="900"
-                    textAnchor="middle"
-                    fill="white"
-                    fontFamily="system-ui"
+                {Lottie && animData.ampersand ? (
+                  <div className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                    <Lottie
+                      animationData={animData.ampersand}
+                      loop
+                      autoplay
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  </div>
+                ) : (
+                  <svg
+                    className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                    viewBox="0 0 400 400"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    &
-                  </text>
-                </svg>
+                    <text
+                      x="200"
+                      y="240"
+                      fontSize="200"
+                      fontWeight="900"
+                      textAnchor="middle"
+                      fill="white"
+                      fontFamily="system-ui"
+                    >
+                      &
+                    </text>
+                  </svg>
+                )}
               </div>
 
               {/* Inner glow */}
